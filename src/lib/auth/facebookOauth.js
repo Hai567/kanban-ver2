@@ -1,16 +1,14 @@
+import { FacebookAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../firebase/firebaseConfig";
-import { GoogleAuthProvider,signInWithPopup } from "firebase/auth"
 import { goto } from "$app/navigation"
+const provider = new FacebookAuthProvider();
 
-const provider = new GoogleAuthProvider()
-
-export const signInWithGoogle = async () => {
+export const signInWithFacebook = async function () {
     await signInWithPopup(auth, provider)
         .then((result) => {
             const user = result.user;
             console.log(user)
             goto("/user")
-        }).catch((error) => {
-            console.log(error.message)
-        });
-}   
+        })
+        .catch(error => console.log(error.message))
+}

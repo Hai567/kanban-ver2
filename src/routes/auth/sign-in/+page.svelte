@@ -1,7 +1,8 @@
 <script>
     import { fly } from "svelte/transition";
     import { signInWithGoogle } from "$lib/auth/googleOauth";
-    import { signInWithEmailAndPass } from "$lib/auth/emailAndPassword"
+    import { signInWithFacebook } from "$lib/auth/facebookOauth";
+    import { signInWithEmailAndPass } from "$lib/auth/emailAndPassword";
     
     // Form validation
     let password = ""
@@ -19,6 +20,7 @@
         validPassword = passwordRe.test(password)
     }
     ////////////////////////////////
+    let firebaseErrorMessage = ""
 </script>
 
 <main class="sign-up-main h-full mx-auto w-11/12 md:w-4/6 flex items-center justify-center">
@@ -28,7 +30,12 @@
             <img class="rounded-3xl object-cover" src="/images/sign-in.png" alt="Sign In Image">
         </div>
         <div class="sign-in-form flex justify-center items-center flex-wrap">
-            <form class="form-control max-w-xs mb-6 w-11/12 relative top-0" on:submit={() => signInWithEmailAndPass(email, password)}>
+            <form class="form-control max-w-xs mb-6 w-11/12 relative top-0" on:submit={ 
+                async () => {
+                    firebaseErrorMessage = await signInWithEmailAndPass(email, password)
+                    console.log(firebaseErrorMessage)
+                }
+            }>
                 <!-- svelte-ignore a11y-label-has-associated-control -->
                 <label class="label">
                     <span class="label-text">Enter your email</span>
@@ -44,11 +51,12 @@
                 <span class:hidden={validPassword} class="error-message text-error">Password must contains 8 to 20 characters with at least 1 uppercase, 1 lowercase, 1 digit</span>
 
                 <button disabled={!isUserEligible} class="btn btn-primary mt-3" type="submit">Sign In</button>
+                <p class:hidden={!firebaseErrorMessage} class="text-error">{firebaseErrorMessage.code}</p>
             </form>
             <h3 class="text-center w-full">Don't have an account? Don't worry, sign up <a class="text-blue-500" href="/auth/sign-up">here</a></h3>
             <div class="oauth-options w-3/4 mx-auto flex gap-4 justify-center pt-4 border-t-2 relative bottom-0">
                 <button on:click={(signInWithGoogle)}><i class="fa-brands fa-google oauth-icon google-icon"></i></button>
-                <i class="fa-brands fa-facebook oauth-icon facebook-icon"></i>
+                <button on:click={signInWithFacebook}><i class="fa-brands fa-facebook oauth-icon facebook-icon"></i></button>
                 <i class="fa-brands fa-github oauth-icon"></i>
             </div>
         </div>

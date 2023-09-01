@@ -1,20 +1,27 @@
 import { auth } from "../firebase/firebaseConfig";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword  } from "firebase/auth"
+import { goto } from "$app/navigation"
 
 export const signUpWithEmailAndPass = async function(email, password) {
-    await createUserWithEmailAndPassword(auth, email, password)
-        .then(userCredential => {
-            let user = userCredential.user
-            console.log(user)
-        })
-        .catch(error => console.log(error.message))
+    try {
+        let userCredential = await createUserWithEmailAndPassword(auth, email, password)
+        let user = userCredential.user
+        console.log(user)
+        goto("/user")
+        return null
+    } catch (error) {
+        return error
+    }
 }
 
 export const signInWithEmailAndPass = async function(email, password) {
-    await signInWithEmailAndPassword(auth, email, password)
-        .then(userCredential => {
-            let user = userCredential.user
-            console.log(user)
-        })
-        .catch(error => console.log(error.message))
+    try {
+        let userCredential = await signInWithEmailAndPassword(auth, email, password)
+        let user = userCredential.user
+        console.log(user)
+        goto("/user")
+        return null
+    } catch (error) {
+        return error
+    }
 }
