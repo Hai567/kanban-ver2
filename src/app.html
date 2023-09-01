@@ -3,6 +3,10 @@
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+		<script src="https://kit.fontawesome.com/8bb0bb0d69.js" crossorigin="anonymous"></script>
 		<meta name="viewport" content="width=device-width" />
 		%sveltekit.head%
 	</head>
@@ -10,3 +14,27 @@
 		<div style="display: contents">%sveltekit.body%</div>
 	</body>
 </html>
+
+<style>
+	html{
+		font-family: "Roboto";
+	}
+	body{
+		padding: 0;
+		height: 100vh;
+		-ms-overflow-style: none;  /* IE and Edge */
+		scrollbar-width: none;  /* Firefox */
+	}
+	body::-webkit-scrollbar{
+		display: none; /* Hide scrollbar for Chrome, Safari and Opera */
+	}
+	.google-icon{
+		color: #DB4437;
+	}
+	.facebook-icon{
+		color: #1877F2;
+	}
+	.oauth-icon{
+		font-size: 2.5em;
+	}
+</style>
