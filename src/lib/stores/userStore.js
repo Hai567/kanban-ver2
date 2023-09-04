@@ -8,7 +8,6 @@ if (!browser || !auth){
     console.warn("Auth is not initialized or is not run on browser ")
 }else{
     onAuthStateChanged(auth, ((userData) => {
-        console.log(userData)
         user.set(userData)
     }))
 }
