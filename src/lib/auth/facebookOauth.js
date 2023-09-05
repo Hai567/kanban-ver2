@@ -8,7 +8,7 @@ export const signInWithFacebook = async function () {
         .then((result) => {
             const user = result.user;
             console.log(user)
-            goto("/user")
+            goto(`/user/${user.uid}`)
         })
         .catch(error => console.log(error.message))
 }

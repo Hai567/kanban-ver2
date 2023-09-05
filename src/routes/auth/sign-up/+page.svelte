@@ -35,7 +35,7 @@
             <img class="rounded-3xl object-cover" src="/images/sign-up.png" alt="Sign Up Image">
         </div>
         <div class="sign-up-form flex justify-center items-center flex-wrap">
-            <form class="form-control mb-6 w-11/12 relative top-0 max-w-md" action="" on:submit|preventDefault={() => firebaseErrorMessage = signUpWithEmailAndPass(email, password)}>
+            <form class="form-control mb-6 w-11/12 relative top-0 max-w-md" action="" on:submit|preventDefault={async() => firebaseErrorMessage = await signUpWithEmailAndPass(email, password)}>
                 <!-- svelte-ignore a11y-label-has-associated-control -->
                 <label class="label">
                     <span class="label-text">Enter your email</span>
@@ -59,7 +59,9 @@
                 <input bind:value={rePassword} type="password" placeholder="That goes here" on:keyup={comfirmPassword} class="input input-bordered w-full" required />
                 <span class:hidden={passwordResemble} class="error-message text-error">Passwords are not resemble</span>
                 <button disabled={!isUserEligible} class="btn btn-primary mt-3" type="submit">Sign Up</button>
-                <p class:hidden={!firebaseErrorMessage} class="text-error">{firebaseErrorMessage.code}</p>
+                {#if firebaseErrorMessage}
+                    <p class="text-error">{firebaseErrorMessage.code}</p>
+                {/if}
             </form>
             <h3 class="w-full text-center">Already have an account, sign in <a class="text-blue-500" href="/auth/sign-in">here</a></h3>
             <div class="oauth-options w-3/4 mx-auto flex gap-4 justify-center pt-4 border-t-2 relative bottom-0">

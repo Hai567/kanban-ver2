@@ -1,5 +1,4 @@
 <script>
-    import AuthCheck from "$lib/components/AuthCheck.svelte";
     import { onMount } from "svelte";
     import { db } from "$lib/firebase/firebaseConfig"
     import { onSnapshot, doc, collection } from "firebase/firestore"
@@ -41,15 +40,13 @@
     
 </script>
 
-<AuthCheck>
 
-    <div id="todo" class="container" bind:this={todo}>
-        {#each todoList as item, index (index)}
-            <div class="item">{item}</div>
-        {/each}
-    </div>
+<div id="todo" class="container" bind:this={todo}>
+    {#each todoList as item, index (index)}
+        <div class="item">{item}</div>
+    {/each}
+</div>
 
-</AuthCheck>
 
 <style>
     .item{
