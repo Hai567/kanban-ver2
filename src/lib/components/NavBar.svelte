@@ -5,20 +5,17 @@
   import Drawer from "./Drawer.svelte";
   import { signOutHandler } from "$lib/auth/signOut"
   let isDarkMode = false
-  let navbarTheme = ""
-  export let bodyTheme = ""
+  export let appTheme = ""
   function toggleDarkModeHandler() {
     isDarkMode = !isDarkMode
     if (isDarkMode){
-      navbarTheme = "night"
-      bodyTheme = "dracula"
+      appTheme = "dracula"
     }else{
-      navbarTheme = "light"
-      bodyTheme = "retro"
+      appTheme = "light"
     }
   }
 </script>
-<div id="navbar-top" class="navbar bg-base-100" data-theme={navbarTheme||"light"}>
+<div id="navbar-top" class="navbar bg-base-200" data-theme={appTheme||"light"}>
     <div class="navbar-start">
       <Drawer />
     </div>

@@ -5,11 +5,11 @@ import { collection, doc, getDoc, setDoc } from "firebase/firestore"
 
 
 export let addUserToFirestore = async function () {
-    user.subscribe( async (userData) => {
+    await user.subscribe( async (userData) => {
         await getDoc(doc(db, "users", userData.uid))
             .then(async(user) => {
-                if (user){
-                    console.log("User already in db")
+                if (user.exists == true){
+                    console.log("User is already in db")
                 }else{
                     let photoURL = ""
                     if (userData.photoURL == null){
@@ -23,7 +23,8 @@ export let addUserToFirestore = async function () {
                         emailVerified: userData.emailVerified,
                         isAnonymous: userData.isAnonymous,
                         phoneNumber: userData.phoneNumber,
-                        photoURL: photoURL
+                        photoURL: photoURL,
+                        kanbans: []
                     })
                         .then(() => console.log("Add user to db successfully"))
                         .catch((e) => console.log(e.message))

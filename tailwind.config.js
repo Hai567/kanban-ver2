@@ -3,7 +3,7 @@ export default {
   content: ['./src/**/*.{html,js,svelte,ts}'],
   plugins: [require("daisyui")],
   daisyui: {
-    themes: ["retro", "cupcake", "night", "dark", "dracula", "light"],
+    themes: ["retro", "night", "dracula", "light"],
     darkTheme: "night",
   },
 };
