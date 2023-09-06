@@ -12,7 +12,7 @@
     }
 
     onMount(async () => {
-        itemsRef = collection(db, "items")
+        let itemsRef = collection(db, "items")
         Sortable.create(todo, {
             group: {
                 put: true,
