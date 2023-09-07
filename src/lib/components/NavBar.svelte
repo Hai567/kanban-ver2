@@ -4,8 +4,15 @@
   import { goto } from "$app/navigation"
   import Drawer from "./Drawer.svelte";
   import { signOutHandler } from "$lib/auth/signOut"
+	import { onMount } from "svelte";
   let isDarkMode = false
   export let appTheme = ""
+  $: userAvatarLink = ""
+  onMount(() => {
+    if ( $user ){
+      userAvatarLink = $user.photoURL
+    }
+  })
   function toggleDarkModeHandler() {
     isDarkMode = !isDarkMode
     if (isDarkMode){
@@ -30,7 +37,7 @@
         <div class="dropdown dropdown-end">
           <label tabindex="0" class="btn btn-ghost btn-circle avatar">
             <div class="w-10 rounded-full">
-              <img src="https://lh3.googleusercontent.com/a/AAcHTtdL0H2aBC-Vm0_Ck2No3qscVNSGt3gt7NDZWc_tbbP6Cw=s96-c" />
+              <img src={userAvatarLink} />
             </div>
           </label>
           <ul tabindex="0" class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">

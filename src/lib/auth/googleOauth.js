@@ -6,12 +6,17 @@ import { addUserToFirestore } from "./addUserToFirestore";
 const provider = new GoogleAuthProvider()
 
 export const signInWithGoogle = async () => {
-    await signInWithPopup(auth, provider)
-        .then(async (result) => {
-            const user = result.user;
-            await addUserToFirestore()
-            goto(`/user/${user.uid}`)
-        }).catch((error) => {
-            console.log(error.message)
-        });
+    try {
+        let authenticatedUser = await signInWithPopup(auth, provider)
+            .then(async (result) => {
+                return result.user;
+            }).catch((error) => {
+                console.log(error.message)
+            });
+        
+        await addUserToFirestore()
+        await goto(`/user/${authenticatedUser.uid}`)
+    } catch (error) {
+        console.log(error.message)
+    }
 }   
