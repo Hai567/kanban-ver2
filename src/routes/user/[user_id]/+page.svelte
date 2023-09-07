@@ -5,6 +5,7 @@
     import { createRandomKanbanId } from "$lib/helpers/createRandomKanbanID"
     import { goto } from "$app/navigation"
     $: userKanbanName = ""
+    let kanbans = []
     let closeModalBtn
     async function createNewKanban() {
         let newKanbanRandomId = await createRandomKanbanId()
@@ -17,6 +18,7 @@
         })
         batch.set(doc(db, "kanbans", newKanbanRandomId), {
             kname: userKanbanName,
+            uid: $user.uid,
             todo: [],
             inProgress: [],
             done: []
@@ -25,7 +27,6 @@
         closeModalBtn.click()
         userKanbanName = ""
     }
-    let kanbans = []
     // async function getKanbans () {
     onSnapshot(doc(db, "users", $user.uid), async (snapshot) => {
         kanbans = snapshot.data().kanbans
@@ -83,7 +84,6 @@
         </div>
     </div>
 </main>
-
 <style>
     main.main-container{
         display: grid;
