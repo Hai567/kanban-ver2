@@ -1,6 +1,5 @@
 <script>
     import { onMount } from "svelte";
-    import { db } from "$lib/firebase/firebaseConfig"
     import { onSnapshot, doc, collection } from "firebase/firestore"
     import Sortable from "sortablejs"
     let todo, inProgress, done
@@ -12,7 +11,6 @@
     }
 
     onMount(async () => {
-        let itemsRef = collection(db, "items")
         Sortable.create(todo, {
             group: {
                 put: true,
@@ -24,12 +22,14 @@
             group: {
                 put: true,
             },
+            onEnd: reSortHandler,
             animation: 200,
         })
         Sortable.create(done, {
             group: {
                 put: true,
             },
+            onEnd: reSortHandler,
             animation: 200,
         })
     })
@@ -43,6 +43,18 @@
 
 <div id="todo" class="container" bind:this={todo}>
     {#each todoList as item, index (index)}
+        <div class="item">{item}</div>
+    {/each}
+</div>
+<hr>
+<div id="inProgress" class="container" bind:this={inProgress}>
+    {#each inProgressList as item, index (index)}
+        <div class="item">{item}</div>
+    {/each}
+</div>
+<hr>
+<div id="done" class="container" bind:this={done}>
+    {#each doneList as item, index (index)}
         <div class="item">{item}</div>
     {/each}
 </div>

@@ -1,10 +1,11 @@
 <script>
     /** @type {import('./$types').LayoutData} */
     export let data;
-    import { onSnapshot, doc, arrayRemove, arrayUnion, collection, updateDoc, getDoc } from "firebase/firestore"
-    import { user } from "$lib/stores/userStore"
+    import { onSnapshot, doc, arrayRemove, arrayUnion, updateDoc, getDoc, writeBatch } from "firebase/firestore"
+    import LoadingScreen from "$lib/components/LoadingScreen.svelte";
     import { db } from "$lib/firebase/firebaseConfig"
 	import { onMount } from "svelte";
+    import Sortable from "sortablejs"
     $: todoItem = ""
     $: inProgressItem = ""
     $: doneItem = ""
@@ -14,38 +15,98 @@
         inProgress: [],
         done: []
     }
-    let closeAddTodoModalBtn
-    let closeAddInProgressModalBtn
-    let closeAddDoneModalBtn
-    onMount(() => {
+    let closeAddTodoModalBtn, closeAddInProgressModalBtn, closeAddDoneModalBtn, todoCol, inProgressCol, doneCol
+    async function reFetchDB() {
+        isLoaded = false
+        await getDoc(doc(db, "kanbans", data.kanban_id))
+            .then(async (userSnapShot) => {
+            currentKanban = await userSnapShot.data()
+        })
         isLoaded = true
-    })
-    onSnapshot(doc(db, "kanbans", data.kanban_id), async (userSnapShot) => {
-        currentKanban = await userSnapShot.data()
+    } 
+    onMount(async() => {
+    // Wait until the component is mounted
+    // Then get the kanban data
+    // After the kanban data is loaded, set isLoaded to true, then wait 2s for all the DOM to be loaded and create sortable cols
+        await getDoc(doc(db, "kanbans", data.kanban_id))
+            .then(async (userSnapShot) => {
+                currentKanban = await userSnapShot.data()
+            })
+        isLoaded = true
+        // onSnapshot(doc(db, "kanbans", data.kanban_id), async (userSnapShot) => {
+        //     currentKanban = await userSnapShot.data()
+        // })
+        setTimeout(() => {
+            Sortable.create(todoCol, {
+                group: {
+                    put: true
+                },
+                onEnd: reSortHandler,
+                animation: 200,
+            })
+            Sortable.create(inProgressCol, {
+                group: {
+                    put: true
+                },
+                onEnd: reSortHandler,
+                animation: 200,
+            })
+            Sortable.create(doneCol, {
+                group: {
+                    put: true
+                },
+                onEnd: reSortHandler,
+                animation: 200,
+            })
+        }, 2000)
     })
     async function addNewTodoItem() {
-        updateDoc(doc(db, "kanbans", data.kanban_id), {
+        await updateDoc(doc(db, "kanbans", data.kanban_id), {
             todo: arrayUnion(todoItem)
         })
         todoItem = ""
         closeAddTodoModalBtn.click()
+        reFetchDB()
     }
     async function addNewInProgressItem() {
-        updateDoc(doc(db, "kanbans", data.kanban_id), {
+        await updateDoc(doc(db, "kanbans", data.kanban_id), {
             inProgress: arrayUnion(inProgressItem)
         })
         inProgressItem = ""
         closeAddInProgressModalBtn.click()
+        reFetchDB()
     }
     async function addNewDoneItem() {
-        updateDoc(doc(db, "kanbans", data.kanban_id), {
+        await updateDoc(doc(db, "kanbans", data.kanban_id), {
             done: arrayUnion(doneItem)
         })
         doneItem = ""
         closeAddDoneModalBtn.click()
+        reFetchDB()
+    }
+    let reSortHandler = function (e){
+        let batch = writeBatch(db)
+        // Name (id) of from col (todo, inProgress, done)
+        let fromColName = e.from.id
+        // Name (id) of to col (todo, inProgress, done)
+        let toColName = e.to.id
+        // Items in from list
+        let fromList = e.from.innerText.split("\n")
+        // Items in to list
+        let toList = e.to.innerText.split("\n")
+
+        // Update from db
+        batch.update(doc(db, "kanbans", data.kanban_id), {
+            [fromColName]: fromList
+        })
+        // Update to db
+        batch.update(doc(db, "kanbans", data.kanban_id), {
+            [toColName]: toList
+        })
+        batch.commit()
     }
 </script>
-{#if isLoaded}
+{#if isLoaded==true}
     <main class="kanban-board grid grid-cols-3 gap-6 p-4 w-5/6 m-auto">
         <div class="todo-col border rounded-lg p-7">
             <!-- Header -->
@@ -76,10 +137,10 @@
             <!-- ////////////////////////////////////////////////////////// -->
             <hr>
             <!-- Displayer -->
-            <div class="items-display mt-4">
+            <div id="todo" class="items-display mt-4 h-full" bind:this={todoCol}>
                 {#if currentKanban.todo.length > 0}
                     {#each currentKanban.todo as todoItem, index (index)}
-                        <div class="item px-5 pt-5 pb-3 my-2 bg-item-color rounded-lg">
+                        <div class="item px-5 pt-5 pb-3 my-2 bg-base-200 rounded-lg hover:cursor-move">
                             <h3 style="border-bottom: 1px solid;">{todoItem}</h3>
                         </div>
                     {/each}
@@ -116,10 +177,10 @@
             <hr>
             <!-- ////////////////////////////////////////////////////////// -->
             <!-- Displayer -->
-            <div class="items-display mt-4">
+            <div id="inProgress" class="items-display mt-4 h-full" bind:this={inProgressCol}>
                 {#if currentKanban.inProgress.length > 0}
                     {#each currentKanban.inProgress as inProgressItem, index (index)}
-                        <div class="item px-5 pt-5 pb-3 my-2 bg-item-color rounded-lg">
+                        <div class="item px-5 pt-5 pb-3 my-2 bg-base-200 rounded-lg hover:cursor-move">
                             <h3 style="border-bottom: 1px solid;">{inProgressItem}</h3>
                         </div>
                     {/each}
@@ -157,10 +218,10 @@
             <!-- ////////////////////////////////////////////////////////// -->
             <hr>
             <!-- Displayer -->
-            <div class="items-display mt-4">
+            <div id="done" class="items-display mt-4 h-full" bind:this={doneCol}>
                 {#if currentKanban.done.length > 0}
                     {#each currentKanban.done as doneItem, index (index)}
-                        <div class="item px-5 pt-5 pb-3 my-2 bg-item-color rounded-lg">
+                        <div class="item px-5 pt-5 pb-3 my-2 bg-base-200 rounded-lg hover:cursor-move">
                             <h3 style="border-bottom: 1px solid;">{doneItem}</h3>
                         </div>
                     {/each}
@@ -169,6 +230,8 @@
             <!-- ////////////////////////////////////////////////////////// -->
         </div>
     </main>
+{:else}
+    <LoadingScreen />
 {/if}
 <style>
     .kanban-board{
