@@ -1,26 +1,20 @@
 <script>
-  import DarkModeSwitch from "./DarkModeSwitch.svelte";
-  import { user } from "$lib/stores/userStore"
-  import { goto } from "$app/navigation"
-  import Drawer from "./Drawer.svelte";
-  import { signOutHandler } from "$lib/auth/signOut"
-	import { onMount } from "svelte";
-  let isDarkMode = false
-  export let appTheme = ""
-  $: userAvatarLink = ""
-  onMount(() => {
-    if ( $user ){
-      userAvatarLink = $user.photoURL
+    import DarkModeSwitch from "./DarkModeSwitch.svelte";
+    import { user, userData } from "$lib/stores/userStore"
+    import { goto } from "$app/navigation"
+    import Drawer from "./Drawer.svelte";
+    import { signOutHandler } from "$lib/auth/signOut"
+    let isDarkMode = false
+    export let appTheme = ""
+    function toggleDarkModeHandler() {
+      isDarkMode = !isDarkMode
+      if (isDarkMode){
+        appTheme = "dracula"
+      }else{
+        appTheme = "light"
+      }
     }
-  })
-  function toggleDarkModeHandler() {
-    isDarkMode = !isDarkMode
-    if (isDarkMode){
-      appTheme = "dracula"
-    }else{
-      appTheme = "light"
-    }
-  }
+
 </script>
 <div id="navbar-top" class="navbar bg-base-200" data-theme={appTheme||"light"}>
     <div class="navbar-start">
@@ -33,11 +27,11 @@
       <button id="toggle-darkmode" class="btn btn-square btn-ghost">
         <DarkModeSwitch on:click={toggleDarkModeHandler} />
       </button>
-      {#if $user}
+      {#if $user && $userData}
         <div class="dropdown dropdown-end">
           <label tabindex="0" class="btn btn-ghost btn-circle avatar">
             <div class="w-10 rounded-full">
-              <img src={userAvatarLink} />
+              <img src={$userData.photoURL} />
             </div>
           </label>
           <ul tabindex="0" class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
