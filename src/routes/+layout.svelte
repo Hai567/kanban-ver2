@@ -5,6 +5,15 @@
     import Footer from "../lib/components/Footer.svelte";
     import LoadingScreen from "$lib/components/LoadingScreen.svelte";
     import { isChildLoaded } from "$lib/stores/isChildLoaded.js"
+    import { dev } from '$app/environment';
+    import { inject } from '@vercel/analytics';
+    let mode = ""
+    if (dev){
+        mode = "development"
+    }else{
+        mode = "production"
+    }
+    inject({mode})
 </script>
 {#if $isChildLoaded == false}
     <LoadingScreen />
