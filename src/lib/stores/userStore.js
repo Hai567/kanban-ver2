@@ -5,8 +5,8 @@ import { browser } from "$app/environment";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "$lib/firebase/firebaseConfig"
 
-export const user = writable(null)
-export const userData = writable(null)
+export const user = writable(false)
+export const userData = writable(false)
 if (!browser || !auth){
     console.warn("Auth is not initialized or is not run on browser ")
 }else{

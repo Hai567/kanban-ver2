@@ -3,13 +3,17 @@
     import { db } from "$lib/firebase/firebaseConfig"
     import { onSnapshot, doc, arrayUnion, writeBatch } from "firebase/firestore";
     import { goto } from "$app/navigation"
-	import { onMount } from "svelte";
-    import LoadingScreen from "$lib/components/LoadingScreen.svelte";
     import { createRandomKanbanId } from "$lib/helpers/createRandomKanbanID.js"
+    import { isChildLoaded } from "$lib/stores/isChildLoaded.js"
+	import { onDestroy, onMount } from "svelte";
+
+    onMount(() => { setTimeout(() => {isChildLoaded.set(true)}, 500) })
+    onDestroy(() => {isChildLoaded.set(false)})
+
     $: userKanbanName = ""
-    let isLoaded = false
     let kanbans = []
     let closeModalBtn
+    
     async function createNewKanban() {
         let newKanbanRandomId = await createRandomKanbanId()
         let batch = writeBatch(db)
@@ -35,14 +39,10 @@
         kanbans = snapshot.data().kanbans
     })
     // }
-    onMount(() => { isLoaded = true })
 </script>
 
 <main class="main-container w-full h-full p-4">
-    {#if isLoaded == false}
-        <LoadingScreen />
-    {/if}
-    <div class="side-bar" name="child" class:isChildLoaded={isLoaded}>
+    <div class="side-bar">
         <div class="header flex justify-between items-center mb-4">
             <h3>Your Kanbans</h3>
             <button class="btn btn-accent" onclick="createKanbanModal.showModal()">New</button>

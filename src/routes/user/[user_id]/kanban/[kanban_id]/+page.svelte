@@ -2,36 +2,42 @@
     /** @type {import('./$types').LayoutData} */
     export let data;
     import { onSnapshot, doc, arrayRemove, arrayUnion, updateDoc, getDoc, writeBatch } from "firebase/firestore"
-    import LoadingScreen from "$lib/components/LoadingScreen.svelte";
+    import { isChildLoaded } from "$lib/stores/isChildLoaded.js"
     import { db } from "$lib/firebase/firebaseConfig"
-	import { onMount } from "svelte";
+	import { onDestroy, onMount } from "svelte";
     import Sortable from "sortablejs"
+
     $: todoItem = ""
     $: inProgressItem = ""
     $: doneItem = ""
     $: isLoaded = false
+    isChildLoaded.set(isLoaded)
     $: currentKanban = {
         todo: [],
         inProgress: [],
         done: []
     }
+
     let closeAddTodoModalBtn, closeAddInProgressModalBtn, closeAddDoneModalBtn, todoCol, inProgressCol, doneCol
     async function reFetchDB() {
         isLoaded = false
+        isChildLoaded.set(false)
         await getDoc(doc(db, "kanbans", data.kanban_id))
             .then(async (userSnapShot) => {
             currentKanban = await userSnapShot.data()
         })
         isLoaded = true
+        isChildLoaded.set(true)
     } 
     onMount(async() => {
-    // Wait until the component is mounted
-    // Then get the kanban data
+        // Wait until the component is mounted
+        // Then get the kanban data
         await getDoc(doc(db, "kanbans", data.kanban_id))
             .then(async (userSnapShot) => {
                 currentKanban = await userSnapShot.data()
             })
         isLoaded = true
+        isChildLoaded.set(true)
         // onSnapshot(doc(db, "kanbans", data.kanban_id), async (userSnapShot) => {
         //     currentKanban = await userSnapShot.data()
         // })
@@ -82,30 +88,34 @@
         reFetchDB()
     }
     let reSortHandler = function (e){
-        let batch = writeBatch(db)
-        // Name (id) of from col (todo, inProgress, done)
-        let fromColName = e.from.id
-        // Name (id) of to col (todo, inProgress, done)
-        let toColName = e.to.id
-        // Items in from list
-        let fromList = e.from.innerText.split("\n")
-        // Items in to list
-        let toList = e.to.innerText.split("\n")
+            let batch = writeBatch(db)
+            // Name (id) of from col (todo, inProgress, done)
+            let fromColName = e.from.id
+            // Name (id) of to col (todo, inProgress, done)
+            let toColName = e.to.id
+            // Items in from list
+            let fromList = e.from.innerText.split("\n")
+            // Items in to list
+            let toList = e.to.innerText.split("\n")
+            // If there is no item in the list, set the list to an empty list
+            if ( fromList[0] == ""){
+                fromList = []
+            }if ( toList[0] == ""){
+                toList = []
+            }
 
-        // Update from db
-        batch.update(doc(db, "kanbans", data.kanban_id), {
-            [fromColName]: fromList
-        })
-        // Update to db
-        batch.update(doc(db, "kanbans", data.kanban_id), {
-            [toColName]: toList
-        })
-        batch.commit()
+            // Update from db
+            batch.update(doc(db, "kanbans", data.kanban_id), {
+                [fromColName]: fromList
+            })
+            // Update to db
+            batch.update(doc(db, "kanbans", data.kanban_id), {
+                [toColName]: toList
+            })
+            batch.commit()
     }
+    onDestroy(() => isChildLoaded.set(false))
 </script>
-{#if isLoaded == false}
-    <LoadingScreen />
-{/if}
 <main class="kanban-board grid grid-cols-3 gap-6 p-4 w-5/6 m-auto">
     <div class="todo-col border rounded-lg p-7">
         <!-- Header -->

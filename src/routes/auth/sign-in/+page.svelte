@@ -2,7 +2,12 @@
     import { fly } from "svelte/transition";
     import { signInWithGoogle } from "$lib/auth/googleOauth";
     import { signInWithFacebook } from "$lib/auth/facebookOauth";
-    import { signInWithEmailAndPass } from "$lib/auth/emailAndPassword";
+    import { signInWithEmailAndPass } from "$lib/auth/emailAndPassword"; 
+    import { isChildLoaded } from "$lib/stores/isChildLoaded.js"
+	import { onDestroy, onMount } from "svelte";
+
+    onMount(() => { setTimeout(() => {isChildLoaded.set(true)}, 500) })
+    onDestroy(() => {isChildLoaded.set(false)})
     
     // Form validation
     let password = ""

@@ -3,18 +3,10 @@
     import NavBar from "../lib/components/NavBar.svelte";
     export let appTheme
     import Footer from "../lib/components/Footer.svelte";
-	import { onDestroy, onMount } from "svelte";
     import LoadingScreen from "$lib/components/LoadingScreen.svelte";
-    $: isLoaded = false
-    onMount(() => {
-        isLoaded = true
-    })
-    onDestroy(() => {
-        isLoaded = false
-    })
+    import { isChildLoaded } from "$lib/stores/isChildLoaded.js"
 </script>
-
-{#if isLoaded == false}
+{#if $isChildLoaded == false}
     <LoadingScreen />
 {/if}
 <NavBar bind:appTheme={appTheme} />
