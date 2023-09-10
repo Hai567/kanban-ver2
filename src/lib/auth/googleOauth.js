@@ -9,12 +9,16 @@ export const signInWithGoogle = async () => {
     try {
         let authenticatedUser = await signInWithPopup(auth, provider)
             .then(async (result) => {
-                return result.user;
+                let userAlreadyInDb = await addUserToFirestore(result.user)
+                // Make user finish setting up their info 
+                // if (!userAlreadyInDb){
+                //     goto("/sign-up/finish")
+                // }
+                return result.user
             }).catch((error) => {
                 console.log(error.message)
             });
         
-        await addUserToFirestore()
         await goto(`/user/${authenticatedUser.uid}`)
     } catch (error) {
         console.log(error.message)
