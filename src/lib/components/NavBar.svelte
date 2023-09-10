@@ -22,7 +22,7 @@
       <Drawer />
     </div>
     <div class="navbar-center">
-      <a href="/" class="btn btn-ghost normal-case text-xl">Kanban App</a>
+      <a href="/" class="btn btn-ghost normal-case text-xl" data-sveltekit-preload-data="tap">Kanban App</a>
     </div>
     <div class="navbar-end gap-2">
       <button id="toggle-darkmode" class="btn btn-square btn-ghost">
