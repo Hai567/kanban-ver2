@@ -1,6 +1,7 @@
 <script>
     import DarkModeSwitch from "./DarkModeSwitch.svelte";
-    import { user, userData } from "$lib/stores/userStore"
+    import { user } from "$lib/stores/userStore"
+    import { userData } from "$lib/stores/userDataStore"
     import { goto } from "$app/navigation"
     import Drawer from "./Drawer.svelte";
     import { signOutHandler } from "$lib/auth/signOut"
