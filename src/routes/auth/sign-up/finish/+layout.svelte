@@ -2,6 +2,7 @@
     import { userData } from "$lib/stores/userDataStore"
     import { onDestroy, onMount } from "svelte";
     import { isChildLoaded } from "$lib/stores/isChildLoaded"
+    import { page } from "$app/stores"
     onMount(() => {
         setTimeout(() => {
             isChildLoaded.set(true)
@@ -15,8 +16,8 @@
         <ul class="steps">
             <a class="step step-primary">Register</a>
             <a href="/auth/sign-up/finish/username" class="step step-primary">Choose username</a>
-            <a href="/auth/sign-up/finish/avatar" class="step">Update Avatar</a>
-            <a href="/auth/sign-up/finish/bio" class="step">Bio</a>
+            <a href="/auth/sign-up/finish/avatar" class="step" class:step-primary={$page.url.pathname.includes("avatar") || $page.url.pathname.includes("bio")}>Update Avatar</a>
+            <a href="/auth/sign-up/finish/bio" class="step" class:step-primary={$page.url.pathname.includes("bio")}>Bio</a>
         </ul>
 
         <div class="w-full">

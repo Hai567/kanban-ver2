@@ -1,6 +1,15 @@
 <script>
     import { user } from "$lib/stores/userStore"
+    import { goto } from "$app/navigation"
+    import { onMount } from "svelte";
     export let userIDParam = ""
+    onMount(() => {
+        if ( !$user ){
+            setTimeout(() => {
+                goto("/auth/sign-in")
+            }, 3000)
+        }
+    })
 </script>
 {#if $user}
     {#if $user.uid == userIDParam}
