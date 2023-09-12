@@ -36,6 +36,7 @@
             </div>
           </label>
           <ul tabindex="0" class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
+            <li class="text-center font-bold text-md">{$userData.displayName}</li>
             <li>
               <a on:click={() => goto(`/user/${$user.uid}/profile`)} class="justify-between">
                 Profile
