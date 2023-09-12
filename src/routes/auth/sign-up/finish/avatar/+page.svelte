@@ -9,7 +9,7 @@
 
     let userFile
     let previewLink
-    let isUploading = true
+    let isUploading = false
     function previewUploadedImage(e) {
         userFile = e.target.files[0]
         previewLink = URL.createObjectURL(userFile)
