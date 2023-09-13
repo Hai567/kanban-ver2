@@ -6,9 +6,8 @@ import { addUserToFirestore } from "./addUserToFirestore";
 export const signUpWithEmailAndPass = async function(email, password) {
     try {
         let userCredential = await createUserWithEmailAndPassword(auth, email, password)
-        let user = userCredential.user
-        await addUserToFirestore()
-        goto(`/user/${user.uid}`)
+        await addUserToFirestore(userCredential.user)
+        goto(`/auth/sign-up/finish/username`)
         return null
     } catch (error) {
         return error

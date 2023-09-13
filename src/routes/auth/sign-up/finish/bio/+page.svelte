@@ -8,7 +8,9 @@
     let inputBio = "New-comer"
 
     async function updateBio() {
-        let result = await updateDoc(doc(db, "users", $user.uid))
+        let result = await updateDoc(doc(db, "users", $user.uid), {
+            bio: inputBio
+        })
         goto(`/auth/sign-up/done`)
     }
 </script>
@@ -21,7 +23,7 @@
             <input bind:value={inputBio} class="input input-bordered w-full" type="text" on:click={() => {inputBio=""}}>   
             <div class="flex justify-end w-full">
                 {#if inputBio.length < 5 || inputBio=="New-comer"}
-                    <button class="btn"><a href="/auth/sign-up/done">Skip</a></button> 
+                    <button on:click={() => {inputBio="New-comer"}} class="btn"><a href="/auth/sign-up/done">Skip</a></button> 
                 {:else}
                     <button on:click={updateBio} class="btn btn-success">Update Bio</button> 
                 {/if}

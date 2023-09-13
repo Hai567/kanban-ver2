@@ -5,8 +5,13 @@
     import { goto } from "$app/navigation"
     import FlyInOutAnimation from "$lib/components/FlyInOutAnimation.svelte"
 
-
-    let inputUsername = $user.displayName.toLowerCase().replaceAll(" ", "") || ""
+    let inputUsername
+    if ($user.displayName){
+        inputUsername = $user.displayName.toLowerCase().replaceAll(" ", "")
+    }else{
+        inputUsername = ""
+    }
+     
     $: isUsernameTaken = true
     $: usernameRegexValid = true
     $: usernameValid = isUsernameTaken && usernameRegexValid && inputUsername.length > 5

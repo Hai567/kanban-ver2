@@ -21,7 +21,8 @@ export let addUserToFirestore = async function (userData) {
                 console.log("User is already in db")
                 resolve(true) 
             }else{
-                let photoURL = photoURL = userData.photoURL || "https://static.vecteezy.com/system/resources/previews/008/442/086/original/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg"
+
+                let photoURL = userData.photoURL || "https://static.vecteezy.com/system/resources/previews/008/442/086/original/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg"
                     
                 try {
                     await setDoc(doc(db, "users", userData.uid), {

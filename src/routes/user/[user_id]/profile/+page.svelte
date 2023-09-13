@@ -15,7 +15,8 @@
                     <img src={$userData.photoURL} />
                 </div>
             </div>
-            <h4 class="text-center font-bold text-2xl">How is your day {$userData.displayName}</h4>
+            <h4 class="text-center font-bold text-2xl">{$userData.displayName}</h4>
+            <p class="text-center">{$userData.bio}</p>
         </div>
     </div>
 </main>
