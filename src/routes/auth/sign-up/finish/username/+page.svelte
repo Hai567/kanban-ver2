@@ -14,7 +14,7 @@
      
     $: isUsernameTaken = true
     $: usernameRegexValid = true
-    $: usernameValid = isUsernameTaken && usernameRegexValid && inputUsername.length > 5
+    $: usernameValid = isUsernameTaken && usernameRegexValid && inputUsername.length >= 5
     let usernameRegex = /^[0-9a-zA-Z]{5,30}$/
     let timer
 
@@ -33,7 +33,7 @@
                         }
                     })
                 }
-		}, 350);
+		}, 500);
 	}
     async function submitUsernameHandler() {
         let batch = writeBatch(db)

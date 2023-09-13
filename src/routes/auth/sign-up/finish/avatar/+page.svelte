@@ -45,7 +45,7 @@
                 {#if userFile}
                     <button on:click={uploadImage} class="btn btn-success">Upload Image</button> 
                 {:else}
-                    <button on:click={() => goto("/auth/sign-up/finish/bio")} class="btn">Skip</button> 
+                    <button class="btn"><a href="/auth/sign-up/finish/bio">Skip</a></button> 
                 {/if}
             </div>
         </form>
