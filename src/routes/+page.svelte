@@ -2,8 +2,18 @@
 	import { onDestroy, onMount } from "svelte";
     import FlyInOutAnimation from "$lib/components/FlyInOutAnimation.svelte"
     import { isChildLoaded } from "$lib/stores/isChildLoaded.js"
+    import { user } from "$lib/stores/userStore"
+    import { userData } from "$lib/stores/userDataStore"
+    import { goto } from "$app/navigation"
     
-    onMount(() => { setTimeout(() => {isChildLoaded.set(true)}, 500) })
+    onMount(() => { 
+        setTimeout(() => {
+            isChildLoaded.set(true)
+        }, 500) 
+        if ($user && $userData){
+            goto(`/user/${$user.uid}`)
+        }
+    })
     onDestroy(() => {isChildLoaded.set(false)})
 </script>
 

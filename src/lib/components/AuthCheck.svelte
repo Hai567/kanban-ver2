@@ -1,5 +1,6 @@
 <script>
     import { user } from "$lib/stores/userStore"
+    import { userData } from "$lib/stores/userDataStore" 
     import { goto } from "$app/navigation"
     import { onMount } from "svelte";
     export let userIDParam = ""
@@ -11,7 +12,7 @@
         }
     })
 </script>
-{#if $user}
+{#if $user && $userData}
     {#if $user.uid == userIDParam}
         <slot></slot>
     {:else}

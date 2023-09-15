@@ -34,7 +34,8 @@ export let addUserToFirestore = async function (userData) {
                         photoURL: photoURL,
                         kanbans: [],
                         createdAt: serverTimestamp(),
-                        isProfileSetupCorrectly: false
+                        isProfileSetupCorrectly: false,
+                        bio: ""
                     })
                     console.log("Added user to db successfully")
                     resolve(false) 

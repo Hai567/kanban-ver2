@@ -7,10 +7,11 @@
 
     let inputBio = "New-comer"
 
-    async function updateBio() {
+    async function updateBio(inputBio) {
         let result = await updateDoc(doc(db, "users", $user.uid), {
             bio: inputBio
         })
+        console.log(result)
         goto(`/auth/sign-up/done`)
     }
 </script>
@@ -23,9 +24,9 @@
             <input bind:value={inputBio} class="input input-bordered w-full" type="text" on:click={() => {inputBio=""}}>   
             <div class="flex justify-end w-full">
                 {#if inputBio.length < 5 || inputBio=="New-comer"}
-                    <button on:click={() => {inputBio="New-comer"}} class="btn"><a href="/auth/sign-up/done">Skip</a></button> 
+                    <button on:click={() => {updateBio("New-comer")}} class="btn"><a href="/auth/sign-up/done">Skip</a></button> 
                 {:else}
-                    <button on:click={updateBio} class="btn btn-success">Update Bio</button> 
+                    <button on:click={() => {updateBio(inputBio)}} class="btn btn-success">Update Bio</button> 
                 {/if}
             </div>
         </form>

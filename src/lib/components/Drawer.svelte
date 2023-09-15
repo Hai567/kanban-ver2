@@ -1,6 +1,7 @@
 <script>
     import { goto } from "$app/navigation"
     import { user } from "$lib/stores/userStore"
+    import { userData } from "$lib/stores/userDataStore"
 </script>
 <div class="drawer">
     <input id="my-drawer" type="checkbox" class="drawer-toggle" />
@@ -15,7 +16,7 @@
         <ul class="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
             <!-- Sidebar content here -->
             <li><a href="/"><i class="fa-solid fa-house mr-4"></i> Home</a></li>
-            { #if $user}
+            { #if $user && $userData }
                 <li on:click={() => goto(`/user/${$user.uid}`)}><a><i class="fa-solid fa-briefcase mr-4"></i> Your Workspace</a></li>
                 <li class="relative bottom-0 mt-auto" on:click={() => goto(`/user/${$user.uid}`)}><a><i class="fa-solid fa-gear mr-4"></i> Settings</a></li>
             {:else}

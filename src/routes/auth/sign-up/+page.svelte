@@ -6,12 +6,13 @@
     import { isChildLoaded } from "$lib/stores/isChildLoaded.js";
 	import { onDestroy, onMount } from "svelte";
     import { user } from "$lib/stores/userStore.js";
+    import { userData } from "$lib/stores/userDataStore.js";
     import { goto } from "$app/navigation"
 
     onMount(() => { 
         setTimeout(() => {
             isChildLoaded.set(true)
-            if ($user){
+            if ($user && $userData){
                 goto(`/user/${$user.uid}`)
             }
         }, 500) 
