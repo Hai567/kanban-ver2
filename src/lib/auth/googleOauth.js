@@ -13,7 +13,8 @@ export const signInWithGoogle = async () => {
             if (!userAlreadyInDb){
                 goto("/auth/sign-up/finish/username")
             }else{
-                goto(`/user/${result.uid}`)
+                console.log(result)
+                goto(`/user/${result.user.uid}`)
             }
             return result.user
         }).catch((error) => {

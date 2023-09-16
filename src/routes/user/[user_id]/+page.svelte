@@ -20,6 +20,7 @@
         batch.update(doc(db, "users", $user.uid), {
             kanbans: arrayUnion({
                 kid: newKanbanRandomId,
+                uid: $user.uid,
                 kname: userKanbanName
             })
         })

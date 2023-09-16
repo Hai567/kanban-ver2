@@ -114,6 +114,9 @@
             })
             batch.commit()
     }
+    async function editTodoItem(e) {
+        console.log(this.parentElement.children[0])
+    }
     onDestroy(() => isChildLoaded.set(false))
 </script>
 <main class="kanban-board grid grid-cols-3 gap-6 p-4 w-5/6 m-auto">
@@ -149,8 +152,9 @@
         <div id="todo" class="items-display mt-4 h-full" bind:this={todoCol}>
             {#if currentKanban.todo.length > 0}
                 {#each currentKanban.todo as todoItem, index (index)}
-                    <div class="item px-5 pt-5 pb-3 my-2 bg-base-200 rounded-lg hover:cursor-move">
-                        <h3 style="border-bottom: 1px solid;">{todoItem}</h3>
+                    <div class="item px-5 pt-5 pb-3 my-2 bg-base-200 rounded-lg hover:cursor-pointer hover:bg-base-300 flex justify-between relative ease-in-out">
+                        <h3 style="border-bottom: 1px solid;" class="grow hover:mr-8 ease-in-out">{todoItem}</h3>
+                        <button on:click={editTodoItem} class="absolute top-0 right-0 h-full px-4 hidden hover:btn-ghost rounded-r-lg"><i class="fa-solid fa-pen ease-in-out"></i></button>
                     </div>
                 {/each}
             {/if}
@@ -189,8 +193,9 @@
         <div id="inProgress" class="items-display mt-4 h-full" bind:this={inProgressCol}>
             {#if currentKanban.inProgress.length > 0}
                 {#each currentKanban.inProgress as inProgressItem, index (index)}
-                    <div class="item px-5 pt-5 pb-3 my-2 bg-base-200 rounded-lg hover:cursor-move">
-                        <h3 style="border-bottom: 1px solid;">{inProgressItem}</h3>
+                    <div class="item px-5 pt-5 pb-3 my-2 bg-base-200 rounded-lg hover:cursor-pointer hover:bg-base-300 flex justify-between relative ease-in-out">
+                        <h3 style="border-bottom: 1px solid;" class="grow hover:mr-8 ease-in-out">{inProgressItem}</h3>
+                        <button class="absolute top-0 right-0 h-full px-4 hidden hover:btn-ghost rounded-r-lg"><i class="fa-solid fa-pen ease-in-out"></i></button>
                     </div>
                 {/each}
             {/if}
@@ -230,8 +235,9 @@
         <div id="done" class="items-display mt-4 h-full" bind:this={doneCol}>
             {#if currentKanban.done.length > 0}
                 {#each currentKanban.done as doneItem, index (index)}
-                    <div class="item px-5 pt-5 pb-3 my-2 bg-base-200 rounded-lg hover:cursor-move">
-                        <h3 style="border-bottom: 1px solid;">{doneItem}</h3>
+                    <div class="item px-5 pt-5 pb-3 my-2 bg-base-200 rounded-lg hover:cursor-pointer hover:bg-base-300 flex justify-between relative ease-in-out">
+                        <h3 style="border-bottom: 1px solid;" class="grow hover:mr-8 ease-in-out">{doneItem}</h3>
+                        <button class="absolute top-0 right-0 h-full px-4 hidden hover:btn-ghost bordered rounded-r-lg"><i class="fa-solid fa-pen ease-in-out"></i></button>
                     </div>
                 {/each}
             {/if}
@@ -242,5 +248,11 @@
 <style>
     .kanban-board{
         min-height: 35em;
+    }
+    .item:hover h3{
+        margin-right: 2.2em;
+    }
+    .item:hover button{
+        display: block;
     }
 </style>
