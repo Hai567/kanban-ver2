@@ -6,6 +6,7 @@
     import { createRandomKanbanId } from "$lib/helpers/createRandomKanbanID.js"
     import { isChildLoaded } from "$lib/stores/isChildLoaded.js"
 	import { onDestroy, onMount } from "svelte";
+    import { beforeNavigate } from "$app/navigation"
 
     onMount(() => { setTimeout(() => {isChildLoaded.set(true)}, 500) })
     onDestroy(() => {isChildLoaded.set(false)})

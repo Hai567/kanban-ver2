@@ -5,11 +5,11 @@
     import { onMount } from "svelte";
     export let userIDParam = ""
     onMount(() => {
-        if ( !$user ){
-            setTimeout(() => {
+        setTimeout(() => {
+            if (!$user){
                 goto("/auth/sign-in")
-            }, 3000)
-        }
+            }
+        }, 2000)
     })
 </script>
 {#if $user && $userData}
